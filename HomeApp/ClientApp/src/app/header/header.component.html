@@ -1,0 +1,34 @@
+<mat-toolbar color="primary">
+  <button *ngIf="authService.isLoggedIn()" mat-button routerLink="/">
+    <mat-icon>home</mat-icon>
+    My App
+  </button>
+  <!-- This fills the remaining space of the current row -->
+  <span class="fill-remaining-space"></span>
+  <div fxLayout="row" fxShow="false" fxShow.gt-sm>
+    <button *ngIf="!authService.isLoggedIn()" mat-button routerLink="/login">
+      Login
+    </button>
+    <button *ngIf="authService.isLoggedIn()" mat-button routerLink="/dashboard">
+      Dashboard
+    </button>
+    <button *ngIf="authService.isLoggedIn()" mat-button (click)="logout()">
+      Logout
+    </button>
+  </div>
+  <button
+    *ngIf="authService.isLoggedIn()"
+    mat-button
+    [mat-menu-trigger-for]="menu"
+    fxHide="false"
+    fxHide.gt-sm
+    [ngStyle]="{ right: '0px' }"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-menu x-position="before" #menu="matMenu">
+  <button mat-menu-item routerLink="/products">Products</button>
+  <button mat-menu-item routerLink="/dashboard">Dashboard</button>
+  <!--<button mat-menu-item>Help</button>-->
+</mat-menu>
