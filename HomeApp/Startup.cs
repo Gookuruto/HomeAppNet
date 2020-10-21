@@ -96,7 +96,9 @@ namespace HomeApp
 
             if (env.IsDevelopment())
             {
+#pragma warning disable CS0618 // Typ lub sk³adowa jest przestarza³a
                 app.UseSwagger();
+#pragma warning restore CS0618 // Typ lub sk³adowa jest przestarza³a
                 app.UseSwaggerUi3();
             }
             //app.UseMiddleware<JwtMiddleware>();

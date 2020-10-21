@@ -5,6 +5,7 @@ using HomeApp.Core.Services.Common;
 using HomeApp.Core.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -21,18 +22,22 @@ namespace HomeApp.Core.Services
     {
 
         private IConfiguration _config;
-        private readonly CoreDatabaseContext _ctx;
+        //private readonly CoreDatabaseContext _ctx;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public UserService(IConfiguration config, CoreDatabaseContext db)
+        public UserService(IConfiguration config, IServiceScopeFactory scopeFactory)
         {
             _config = config;
-            _ctx = db;
+            //_ctx = db;
+            _scopeFactory = scopeFactory;
         }
 
         public async Task<AuthenticateResponse> Authenticate(AuthentiateRequest request)
         {
-
-                var user = await _ctx.Users.FirstOrDefaultAsync(x => x.Username == request.Username && x.Password == request.Password);
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<CoreDatabaseContext>();
+                var user = await db.Users.FirstOrDefaultAsync(x => x.Username == request.Username && x.Password == request.Password);
 
                 // return null if user not found
                 if (user == null) return null;
@@ -40,6 +45,7 @@ namespace HomeApp.Core.Services
                 // authentication successful so generate jwt token
                 var token = generateJwtToken(user);
                 return new AuthenticateResponse(user, token);
+            }
         }
 
         public async Task<IEnumerable<User>> GetAll()

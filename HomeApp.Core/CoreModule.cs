@@ -18,7 +18,7 @@ namespace HomeApp.Core
                 options.UseNpgsql(config.GetConnectionString("MyConnection"));
             }
             );
-            services.AddScoped<IUserService,UserService>();
+            services.AddSingleton<IUserService,UserService>();
 
             return services;
         }

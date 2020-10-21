@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HomeApp.Core.Databse.Recipes.Models;
+using HomeApp.Core.Services.Recipes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,39 +11,35 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HomeApp.Controllers
 {
-    [Route("api/[controller]")]
     public class RecipesController : Controller
     {
+        private readonly GetRecipesService _getRecipesService;
+
+        public RecipesController(GetRecipesService getRecipesService)
+        {
+            _getRecipesService = getRecipesService;
+        }
+
         // GET: api/<controller>
         [Authorize]
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("api/recipes")]
+        [Produces(typeof(List<Recipe>))]
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var result = await _getRecipesService.GetRecipes();
+            return Ok(result);
         }
 
         // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("api/recipes/{id}")]
+        public string GetRecipeById(int id)
         {
             return "value";
         }
 
         // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPost("api/recipes")]
+        public void AddNewRecipe([FromBody]string value)
         {
         }
     }
