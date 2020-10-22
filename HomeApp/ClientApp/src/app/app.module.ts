@@ -1,4 +1,4 @@
-import { UsersClient } from "./webApi/api.generated.clients";
+import { UsersClient, RecipesClient } from "./webApi/api.generated.clients";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -15,9 +15,16 @@ import { AuthService } from "./services/auth.service";
 import { AuthInterceptorService } from "./services/authinjector.service";
 import { CanActivateViaAuthGuard } from "./services/authguard";
 import { API_BASE_URL } from "./webApi/api.generated.clients";
+import { RecipeDetailsComponent } from "./recipes/recipe-details/recipe-details.component";
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, HeaderComponent, LoginComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    HeaderComponent,
+    LoginComponent,
+    RecipeDetailsComponent,
+  ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
     HttpClientModule,
@@ -39,6 +46,7 @@ import { API_BASE_URL } from "./webApi/api.generated.clients";
       },
     },
     UsersClient,
+    RecipesClient,
     AuthService,
     {
       provide: HTTP_INTERCEPTORS,

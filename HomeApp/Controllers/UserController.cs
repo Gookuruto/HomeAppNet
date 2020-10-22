@@ -18,7 +18,6 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("api/authenticate")]
-        [Produces(typeof(AuthenticateResponse))]
         [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody]AuthentiateRequest model)
         {

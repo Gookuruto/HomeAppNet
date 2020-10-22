@@ -1,6 +1,8 @@
 ﻿using HomeApp.Core.Database;
+using HomeApp.Core.Repositories.Recipes;
 using HomeApp.Core.Services;
 using HomeApp.Core.Services.Interfaces;
+using HomeApp.Core.Services.Recipes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +21,8 @@ namespace HomeApp.Core
             }
             );
             services.AddSingleton<IUserService,UserService>();
+            services.AddTransient<GetRecipesService>();
+            services.AddScoped<RecipesRepository>();
 
             return services;
         }

@@ -44,8 +44,9 @@ export class AuthService {
         "Cache-Control": "no-cache",
       }),
     };
-
-    const token = await this.userClient.authenticate(data).toPromise();
+    debugger;
+    var token = await this.userClient.authenticate(data).toPromise();
+    debugger;
     localStorage.setItem(this.TOKEN_KEY, token.token);
 
     this.router.navigateByUrl("/");

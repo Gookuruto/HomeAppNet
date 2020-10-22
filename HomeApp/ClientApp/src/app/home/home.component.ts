@@ -1,3 +1,4 @@
+import { RecipesClient } from "./../webApi/api.generated.clients";
 import { HttpClient } from "@angular/common/http";
 import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import { MatGridTileHeaderCssMatStyler } from "@angular/material/grid-list";
@@ -16,9 +17,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ["position", "author", "title"];
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private recipesClient: RecipesClient) {}
 
-  async ngOnInit(): Promise<void> {}
+  async ngOnInit(): Promise<void> {
+    const data = await this.recipesClient.get().toPromise();
+    this.dataSource = new MatTableDataSource(data);
+  }
   ngAfterViewInit(): void {}
 
   // sortData(sort: Sort): void {

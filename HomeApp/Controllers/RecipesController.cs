@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HomeApp.Core.Databse.Recipes.Models;
+using HomeApp.Core.HttpModels.Recipes;
 using HomeApp.Core.Services.Recipes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,15 +15,18 @@ namespace HomeApp.Controllers
     public class RecipesController : Controller
     {
         private readonly GetRecipesService _getRecipesService;
+        private readonly AddUpdateRecipeService _addUpdateRecipeService;
 
-        public RecipesController(GetRecipesService getRecipesService)
+        public RecipesController(GetRecipesService getRecipesService, AddUpdateRecipeService addUpdateRecipeService)
         {
             _getRecipesService = getRecipesService;
+            _addUpdateRecipeService = addUpdateRecipeService;
         }
 
+
         // GET: api/<controller>
-        [Authorize]
         [HttpGet("api/recipes")]
+        [Authorize]
         [Produces(typeof(List<Recipe>))]
         public async Task<IActionResult> Get()
         {
@@ -39,8 +43,10 @@ namespace HomeApp.Controllers
 
         // POST api/<controller>
         [HttpPost("api/recipes")]
-        public void AddNewRecipe([FromBody]string value)
+        public async Task<IActionResult> AddNewRecipe([FromBody]AddRecipeRequest value)
         {
+            await _addUpdateRecipeService.AddRecipe(value);
+            return Ok();
         }
     }
 }

@@ -27,8 +27,8 @@ export class RecipesClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getAll(): Observable<string[] | null> {
-        let url_ = this.baseUrl + "/api/Recipes";
+    get(): Observable<Recipe[]> {
+        let url_ = this.baseUrl + "/api/recipes";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -40,20 +40,20 @@ export class RecipesClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAll(response_);
+            return this.processGet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetAll(<any>response_);
+                    return this.processGet(<any>response_);
                 } catch (e) {
-                    return <Observable<string[] | null>><any>_observableThrow(e);
+                    return <Observable<Recipe[]>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<string[] | null>><any>_observableThrow(response_);
+                return <Observable<Recipe[]>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetAll(response: HttpResponseBase): Observable<string[] | null> {
+    protected processGet(response: HttpResponseBase): Observable<Recipe[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -67,7 +67,7 @@ export class RecipesClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(item);
+                    result200!.push(Recipe.fromJS(item));
             }
             return _observableOf(result200);
             }));
@@ -76,11 +76,11 @@ export class RecipesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<string[] | null>(<any>null);
+        return _observableOf<Recipe[]>(<any>null);
     }
 
-    post(value: string | null): Observable<void> {
-        let url_ = this.baseUrl + "/api/Recipes";
+    addNewRecipe(value: string | null): Observable<void> {
+        let url_ = this.baseUrl + "/api/recipes";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(value);
@@ -95,11 +95,11 @@ export class RecipesClient {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processPost(response_);
+            return this.processAddNewRecipe(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processPost(<any>response_);
+                    return this.processAddNewRecipe(<any>response_);
                 } catch (e) {
                     return <Observable<void>><any>_observableThrow(e);
                 }
@@ -108,7 +108,7 @@ export class RecipesClient {
         }));
     }
 
-    protected processPost(response: HttpResponseBase): Observable<void> {
+    protected processAddNewRecipe(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -127,8 +127,8 @@ export class RecipesClient {
         return _observableOf<void>(<any>null);
     }
 
-    get(id: number): Observable<string | null> {
-        let url_ = this.baseUrl + "/api/Recipes/{id}";
+    getRecipeById(id: number): Observable<string | null> {
+        let url_ = this.baseUrl + "/api/recipes/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -143,11 +143,11 @@ export class RecipesClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGet(response_);
+            return this.processGetRecipeById(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGet(<any>response_);
+                    return this.processGetRecipeById(<any>response_);
                 } catch (e) {
                     return <Observable<string | null>><any>_observableThrow(e);
                 }
@@ -156,7 +156,7 @@ export class RecipesClient {
         }));
     }
 
-    protected processGet(response: HttpResponseBase): Observable<string | null> {
+    protected processGetRecipeById(response: HttpResponseBase): Observable<string | null> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -176,104 +176,6 @@ export class RecipesClient {
             }));
         }
         return _observableOf<string | null>(<any>null);
-    }
-
-    put(id: number, value: string | null): Observable<void> {
-        let url_ = this.baseUrl + "/api/Recipes/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(value);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json",
-            })
-        };
-
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processPut(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processPut(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<void>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processPut(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<void>(<any>null);
-    }
-
-    delete(id: number): Observable<void> {
-        let url_ = this.baseUrl + "/api/Recipes/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-            })
-        };
-
-        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processDelete(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processDelete(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<void>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processDelete(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<void>(<any>null);
     }
 }
 
@@ -385,6 +287,62 @@ export class UsersClient {
         }
         return _observableOf<FileResponse | null>(<any>null);
     }
+}
+
+export class Recipe implements IRecipe {
+    recipeId!: number;
+    url?: string | undefined;
+    recipeText?: string | undefined;
+    recipeMaterials?: string[] | undefined;
+
+    constructor(data?: IRecipe) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.recipeId = _data["RecipeId"];
+            this.url = _data["Url"];
+            this.recipeText = _data["RecipeText"];
+            if (Array.isArray(_data["RecipeMaterials"])) {
+                this.recipeMaterials = [] as any;
+                for (let item of _data["RecipeMaterials"])
+                    this.recipeMaterials!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): Recipe {
+        data = typeof data === 'object' ? data : {};
+        let result = new Recipe();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["RecipeId"] = this.recipeId;
+        data["Url"] = this.url;
+        data["RecipeText"] = this.recipeText;
+        if (Array.isArray(this.recipeMaterials)) {
+            data["RecipeMaterials"] = [];
+            for (let item of this.recipeMaterials)
+                data["RecipeMaterials"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IRecipe {
+    recipeId: number;
+    url?: string | undefined;
+    recipeText?: string | undefined;
+    recipeMaterials?: string[] | undefined;
 }
 
 export class AuthenticateResponse implements IAuthenticateResponse {

@@ -22,5 +22,22 @@ namespace HomeApp.Core.Repositories.Recipes
         {
             return await _db.Recipes.ToListAsync();
         }
+
+        public async Task AddRecipe(Recipe recipe)
+        {
+            using (var db = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    await _db.AddAsync(recipe);
+                    _db.SaveChanges();
+                    db.Commit();
+                }
+                catch (Exception ex)
+                {
+                    db.Rollback();
+                }
+            }
+        }
     }
 }
