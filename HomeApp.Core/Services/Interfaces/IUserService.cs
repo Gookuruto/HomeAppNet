@@ -9,7 +9,7 @@ namespace HomeApp.Core.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<AuthenticateResponse> Authenticate(AuthentiateRequest request);
+        Task<AuthenticateResponse?> Authenticate(AuthentiateRequest request);
         Task<IEnumerable<User>> GetAll();
         Task<User> GetByUseranem(string username);
     }

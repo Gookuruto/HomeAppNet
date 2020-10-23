@@ -1,9 +1,7 @@
 ﻿using HomeApp.Core.Databse.Recipes.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
+#pragma warning disable CS8618 // Nienullowalne pole jest niezainicjowane. Rozważ zadeklarowanie go jako nullowalnego.
 namespace HomeApp.Core.Database
 {
     public class CoreDatabaseContext : DbContext
@@ -24,3 +22,4 @@ namespace HomeApp.Core.Database
         }
     }
 }
+#pragma warning restore CS8618 // Nienullowalne pole jest niezainicjowane. Rozważ zadeklarowanie go jako nullowalnego.

@@ -1,4 +1,5 @@
 ﻿using HomeApp.Core.Databse.Recipes.Models;
+using HomeApp.Core.DataFilters;
 using HomeApp.Core.Repositories.Recipes;
 using System;
 using System.Collections.Generic;
@@ -16,9 +17,9 @@ namespace HomeApp.Core.Services.Recipes
             _access = access;
         }
 
-        public async Task<List<Recipe>> GetRecipes()
+        public async Task<List<Recipe>> GetRecipes(PageFilter filter)
         {
-            return await _access.GetRecipes();
+            return await _access.GetRecipes(filter);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using HomeApp.Core.Database;
 using HomeApp.Core.Databse.Recipes.Models;
+using HomeApp.Core.DataFilters;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,9 @@ namespace HomeApp.Core.Repositories.Recipes
             _db = db;
         }
 
-        public async Task<List<Recipe>> GetRecipes()
+        public async Task<List<Recipe>> GetRecipes(PageFilter filter)
         {
-            return await _db.Recipes.ToListAsync();
+            return await _db.Recipes.FilterBySearch(filter).ToListAsync();
         }
 
         public async Task AddRecipe(Recipe recipe)
@@ -33,7 +34,7 @@ namespace HomeApp.Core.Repositories.Recipes
                     _db.SaveChanges();
                     db.Commit();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     db.Rollback();
                 }

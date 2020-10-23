@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HomeApp.Core.Databse.Recipes.Models;
+using HomeApp.Core.DataFilters;
 using HomeApp.Core.HttpModels.Recipes;
 using HomeApp.Core.Services.Recipes;
 using Microsoft.AspNetCore.Authorization;
@@ -28,9 +29,10 @@ namespace HomeApp.Controllers
         [HttpGet("api/recipes")]
         [Authorize]
         [Produces(typeof(List<Recipe>))]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery]int page,int itemsPerPage,string? sortPropertyName = null, bool descending = false,string search = "")
         {
-            var result = await _getRecipesService.GetRecipes();
+            var filter = new PageFilter(page, itemsPerPage, sortPropertyName, descending, search);
+            var result = await _getRecipesService.GetRecipes(filter);
             return Ok(result);
         }
 

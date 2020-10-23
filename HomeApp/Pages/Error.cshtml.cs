@@ -14,7 +14,9 @@ namespace HomeApp.Pages
     {
         private readonly ILogger<ErrorModel> _logger;
 
+#pragma warning disable CS8618 // Nienullowalne pole jest niezainicjowane. Rozwa¿ zadeklarowanie go jako nullowalnego.
         public ErrorModel(ILogger<ErrorModel> logger)
+#pragma warning restore CS8618 // Nienullowalne pole jest niezainicjowane. Rozwa¿ zadeklarowanie go jako nullowalnego.
         {
             _logger = logger;
         }

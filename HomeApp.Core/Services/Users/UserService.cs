@@ -32,7 +32,7 @@ namespace HomeApp.Core.Services
             _scopeFactory = scopeFactory;
         }
 
-        public async Task<AuthenticateResponse> Authenticate(AuthentiateRequest request)
+        public async Task<AuthenticateResponse?> Authenticate(AuthentiateRequest request)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
