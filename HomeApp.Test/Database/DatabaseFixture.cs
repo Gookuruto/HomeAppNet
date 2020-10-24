@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace HomeApp.Test.Database
@@ -11,7 +12,7 @@ namespace HomeApp.Test.Database
 
         public DatabaseFixture()
         {
-            var connectionString = "Server =localhost; Port=5432; User Id=postgres;Password=;Database=EFTEST;";
+            var connectionString = File.ReadAllText("ConnectionString.txt");
             var builder = new DbContextOptionsBuilder<CoreDatabaseContext>();
             builder.UseNpgsql(connectionString);
             DbContext = new CoreDatabaseContext(builder.Options);

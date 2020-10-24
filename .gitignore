@@ -9,3 +9,4 @@ appsettings.json
 /.vs/HomeApp
 /HomeApp.Test/bin/Debug/netcoreapp3.1
 /HomeApp.Test/obj
+/HomeApp.Test/Database/ConnectionString.txt
