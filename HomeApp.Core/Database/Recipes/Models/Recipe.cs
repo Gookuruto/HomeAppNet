@@ -13,9 +13,9 @@ namespace HomeApp.Core.Databse.Recipes.Models
         }
 
         public int RecipeId { get; private set; }
-        public string Url { get; private set; }
-        public string RecipeText { get; private set; }
-        public List<string> RecipeMaterials { get; private set; }
+        public string? Url { get; private set; }
+        public string? RecipeText { get; private set; }
+        public List<string>? RecipeMaterials { get; private set; }
 
 
     }

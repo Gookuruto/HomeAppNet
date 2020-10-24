@@ -1,5 +1,6 @@
 ﻿using HomeApp.Core.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,18 +13,19 @@ namespace HomeApp.Test.Database
 
         public DatabaseFixture()
         {
-            var connectionString = File.ReadAllText("ConnectionString.txt");
+            var connectionString = File.ReadAllText("Database\\ConnectionString.txt");
             var builder = new DbContextOptionsBuilder<CoreDatabaseContext>();
             builder.UseNpgsql(connectionString);
             DbContext = new CoreDatabaseContext(builder.Options);
+            DbContext.Database.EnsureDeleted();
             DbContext.Database.Migrate();
             DbContext.Database.EnsureCreated();
         }
 
         public void Dispose()
         {
-            DbContext.Dispose();
             DbContext.Database.EnsureDeleted();
+            DbContext.Dispose();
         }
 
         public CoreDatabaseContext DbContext { get; }
