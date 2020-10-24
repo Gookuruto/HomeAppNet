@@ -6,7 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 
 import { AppComponent } from "./app.component";
-import { HomeComponent } from "./home/home.component";
+import { RecipeListComponent } from "./recipes/recipeList/recipeList.component";
 import { HeaderComponent } from "./header/header.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MaterialModule } from "./material-module";
@@ -16,14 +16,16 @@ import { AuthInterceptorService } from "./services/authinjector.service";
 import { CanActivateViaAuthGuard } from "./services/authguard";
 import { API_BASE_URL } from "./webApi/api.generated.clients";
 import { RecipeDetailsComponent } from "./recipes/recipe-details/recipe-details.component";
+import { HomeComponent } from "./home/home.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    RecipeListComponent,
     HeaderComponent,
     LoginComponent,
     RecipeDetailsComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -33,6 +35,8 @@ import { RecipeDetailsComponent } from "./recipes/recipe-details/recipe-details.
     MaterialModule,
     RouterModule.forRoot([
       { path: "login", component: LoginComponent },
+      { path: "recipe", component: RecipeListComponent },
+      { path: "recipedet", component: RecipeDetailsComponent },
       { path: "", component: HomeComponent },
       { path: "**", redirectTo: "" },
     ]),

@@ -9,6 +9,9 @@
     <button *ngIf="!authService.isLoggedIn()" mat-button routerLink="/login">
       Login
     </button>
+    <button *ngIf="authService.isLoggedIn()" mat-button routerLink="/recipe" >
+      Recipes
+    </button>
     <button *ngIf="authService.isLoggedIn()" mat-button routerLink="/dashboard">
       Dashboard
     </button>
@@ -32,3 +35,4 @@
   <button mat-menu-item routerLink="/dashboard">Dashboard</button>
   <!--<button mat-menu-item>Help</button>-->
 </mat-menu>
+

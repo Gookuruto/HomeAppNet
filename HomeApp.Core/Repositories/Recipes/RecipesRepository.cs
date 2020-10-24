@@ -34,7 +34,7 @@ namespace HomeApp.Core.Repositories.Recipes
                     _db.SaveChanges();
                     db.Commit();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     db.Rollback();
                 }

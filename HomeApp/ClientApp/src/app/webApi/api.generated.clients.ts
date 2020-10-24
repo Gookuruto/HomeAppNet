@@ -27,8 +27,24 @@ export class RecipesClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    get(): Observable<Recipe[]> {
-        let url_ = this.baseUrl + "/api/recipes";
+    get(page: number, itemsPerPage: number, sortPropertyName: string | null | undefined, descending: boolean | undefined, search: string | null | undefined): Observable<Recipe[]> {
+        let url_ = this.baseUrl + "/api/recipes?";
+        if (page === undefined || page === null)
+            throw new Error("The parameter 'page' must be defined and cannot be null.");
+        else
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (itemsPerPage === undefined || itemsPerPage === null)
+            throw new Error("The parameter 'itemsPerPage' must be defined and cannot be null.");
+        else
+            url_ += "itemsPerPage=" + encodeURIComponent("" + itemsPerPage) + "&";
+        if (sortPropertyName !== undefined && sortPropertyName !== null)
+            url_ += "sortPropertyName=" + encodeURIComponent("" + sortPropertyName) + "&";
+        if (descending === null)
+            throw new Error("The parameter 'descending' cannot be null.");
+        else if (descending !== undefined)
+            url_ += "descending=" + encodeURIComponent("" + descending) + "&";
+        if (search !== undefined && search !== null)
+            url_ += "search=" + encodeURIComponent("" + search) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -79,7 +95,7 @@ export class RecipesClient {
         return _observableOf<Recipe[]>(<any>null);
     }
 
-    addNewRecipe(value: string | null): Observable<void> {
+    addNewRecipe(value: AddRecipeRequest): Observable<FileResponse | null> {
         let url_ = this.baseUrl + "/api/recipes";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -91,6 +107,7 @@ export class RecipesClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             })
         };
 
@@ -101,30 +118,31 @@ export class RecipesClient {
                 try {
                     return this.processAddNewRecipe(<any>response_);
                 } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
+                    return <Observable<FileResponse | null>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<void>><any>_observableThrow(response_);
+                return <Observable<FileResponse | null>><any>_observableThrow(response_);
         }));
     }
 
-    protected processAddNewRecipe(response: HttpResponseBase): Observable<void> {
+    protected processAddNewRecipe(response: HttpResponseBase): Observable<FileResponse | null> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(<any>null);
+        return _observableOf<FileResponse | null>(<any>null);
     }
 
     getRecipeById(id: number): Observable<string | null> {
@@ -190,7 +208,7 @@ export class UsersClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    authenticate(model: AuthentiateRequest | null): Observable<AuthenticateResponse> {
+    authenticate(model: AuthentiateRequest): Observable<AuthenticateResponse> {
         let url_ = this.baseUrl + "/api/authenticate";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -291,9 +309,9 @@ export class UsersClient {
 
 export class Recipe implements IRecipe {
     recipeId!: number;
-    url?: string | undefined;
-    recipeText?: string | undefined;
-    recipeMaterials?: string[] | undefined;
+    url!: string;
+    recipeText!: string;
+    recipeMaterials!: string[];
 
     constructor(data?: IRecipe) {
         if (data) {
@@ -301,6 +319,9 @@ export class Recipe implements IRecipe {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
+        }
+        if (!data) {
+            this.recipeMaterials = [];
         }
     }
 
@@ -340,17 +361,72 @@ export class Recipe implements IRecipe {
 
 export interface IRecipe {
     recipeId: number;
-    url?: string | undefined;
-    recipeText?: string | undefined;
-    recipeMaterials?: string[] | undefined;
+    url: string;
+    recipeText: string;
+    recipeMaterials: string[];
+}
+
+export class AddRecipeRequest implements IAddRecipeRequest {
+    url!: string;
+    recipeText!: string;
+    recipeMaterials!: string[];
+
+    constructor(data?: IAddRecipeRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.recipeMaterials = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.url = _data["Url"];
+            this.recipeText = _data["RecipeText"];
+            if (Array.isArray(_data["RecipeMaterials"])) {
+                this.recipeMaterials = [] as any;
+                for (let item of _data["RecipeMaterials"])
+                    this.recipeMaterials!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): AddRecipeRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddRecipeRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Url"] = this.url;
+        data["RecipeText"] = this.recipeText;
+        if (Array.isArray(this.recipeMaterials)) {
+            data["RecipeMaterials"] = [];
+            for (let item of this.recipeMaterials)
+                data["RecipeMaterials"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IAddRecipeRequest {
+    url: string;
+    recipeText: string;
+    recipeMaterials: string[];
 }
 
 export class AuthenticateResponse implements IAuthenticateResponse {
     id!: number;
-    firstName?: string | undefined;
-    lastName?: string | undefined;
-    username?: string | undefined;
-    token?: string | undefined;
+    firstName!: string;
+    lastName!: string;
+    username!: string;
+    token!: string;
 
     constructor(data?: IAuthenticateResponse) {
         if (data) {
@@ -391,10 +467,10 @@ export class AuthenticateResponse implements IAuthenticateResponse {
 
 export interface IAuthenticateResponse {
     id: number;
-    firstName?: string | undefined;
-    lastName?: string | undefined;
-    username?: string | undefined;
-    token?: string | undefined;
+    firstName: string;
+    lastName: string;
+    username: string;
+    token: string;
 }
 
 export class AuthentiateRequest implements IAuthentiateRequest {

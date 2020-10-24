@@ -29,7 +29,7 @@ namespace HomeApp.Controllers
         [HttpGet("api/recipes")]
         [Authorize]
         [Produces(typeof(List<Recipe>))]
-        public async Task<IActionResult> Get([FromQuery]int page,int itemsPerPage,string? sortPropertyName = null, bool descending = false,string search = "")
+        public async Task<IActionResult> Get(int page,int itemsPerPage,string? sortPropertyName = null, bool descending = false,string? search = "")
         {
             var filter = new PageFilter(page, itemsPerPage, sortPropertyName, descending, search);
             var result = await _getRecipesService.GetRecipes(filter);

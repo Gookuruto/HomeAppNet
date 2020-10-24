@@ -7,3 +7,5 @@ appsettings.json
 /HomeApp.Core/obj
 /HomeApp.Core/Database/ConnectionString.txt
 /.vs/HomeApp
+/HomeApp.Test/bin/Debug/netcoreapp3.1
+/HomeApp.Test/obj

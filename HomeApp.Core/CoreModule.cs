@@ -22,6 +22,7 @@ namespace HomeApp.Core
             );
             services.AddSingleton<IUserService,UserService>();
             services.AddTransient<GetRecipesService>();
+            services.AddTransient<AddUpdateRecipeService>();
             services.AddScoped<RecipesRepository>();
 
             return services;

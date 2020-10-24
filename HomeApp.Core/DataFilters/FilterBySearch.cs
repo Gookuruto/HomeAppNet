@@ -11,18 +11,27 @@ namespace HomeApp.Core.DataFilters
     {
         public static IQueryable<T> FilterBySearch<T>(this IQueryable<T> query,PageFilter filter) where T : class
         {
+
             var itemParam = Expression.Parameter(typeof(T), "item");
             var properties = typeof(T).GetProperties().ToList();
-            var sortExpression = Expression.Lambda<Func<T, object>>
-            (Expression.Convert(Expression.Property(itemParam, filter.SortPropName), typeof(object)), itemParam);
-            if (!properties.Any(x => string.Equals(x.Name, filter.SortPropName, StringComparison.OrdinalIgnoreCase) && filter.SortPropName != null)) throw new ArgumentException("Property with anme {0} doesn't exist", filter.SortPropName);
+            Expression<Func<T, object>> sortExpression;
+
+            if (!properties.Any(x => string.Equals(x.Name, filter.SortPropName, StringComparison.OrdinalIgnoreCase)) && filter.SortPropName != null) throw new ArgumentException("Property with anme {0} doesn't exist", filter.SortPropName);
             var elements = Search(query, filter.SearchString, properties, itemParam);
-            if (filter.SortDescending) {
+            if (filter.SortDescending && !string.IsNullOrEmpty(filter.SortPropName)) {
+                sortExpression = Expression.Lambda<Func<T, object>>
+                (Expression.Convert(Expression.Property(itemParam, filter.SortPropName), typeof(object)), itemParam);
                 return elements.OrderByDescending<T, object>(sortExpression).Skip((filter.PageNumber - 1) * filter.ItemsPerPage).Take(filter.ItemsPerPage);
                     }
             else
             {
-                return elements.OrderBy<T,object>(sortExpression).Skip((filter.PageNumber - 1) * filter.ItemsPerPage).Take(filter.ItemsPerPage);
+                if (!string.IsNullOrEmpty(filter.SortPropName))
+                {
+                    sortExpression = Expression.Lambda<Func<T, object>>
+                (Expression.Convert(Expression.Property(itemParam, filter.SortPropName), typeof(object)), itemParam);
+                    return elements.OrderBy<T, object>(sortExpression).Skip((filter.PageNumber - 1) * filter.ItemsPerPage).Take(filter.ItemsPerPage);
+                }
+                    return elements.Skip((filter.PageNumber - 1) * filter.ItemsPerPage).Take(filter.ItemsPerPage);
             }
         }
 
