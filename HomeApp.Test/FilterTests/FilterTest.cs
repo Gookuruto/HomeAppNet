@@ -30,7 +30,7 @@ namespace HomeApp.Test
         [Fact(DisplayName = "Should return all recipes")]
         public async Task Test1()
         {
-            await _repo.AddRecipe(new Recipe(0, "testUrl", "test", null));
+            await _repo.AddRecipe(new Recipe(0,"testName", "testUrl", "test",null));
             var results = await _repo.GetRecipes(new Core.DataFilters.PageFilter(1, 100));
             Assert.Single(results);
 

@@ -7,12 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeApp", "HomeApp\HomeApp.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeApp.Core", "HomeApp.Core\HomeApp.Core.csproj", "{0E1AF34D-7836-4725-A35D-B65FA956E2E7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{96F85827-4EF9-49E1-801D-7F5DF30F1C58}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeApp.Test", "HomeApp.Test\HomeApp.Test.csproj", "{B8D785EB-755F-48EF-B9A1-87B31E1FF292}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeApp.Test", "HomeApp.Test\HomeApp.Test.csproj", "{B8D785EB-755F-48EF-B9A1-87B31E1FF292}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

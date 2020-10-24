@@ -20,7 +20,7 @@ namespace HomeApp.Core.Services.Recipes
         public async Task AddRecipe(AddRecipeRequest request)
         {
             if (request == null) return;
-            var recipe = new Recipe(0, request.Url, request.RecipeText, request.RecipeMaterials);
+            var recipe = new Recipe(0, request.Name, request.Url, request.RecipeText,null);
             await _recipesRepositry.AddRecipe(recipe);
         }
     }
