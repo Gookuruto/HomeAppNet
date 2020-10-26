@@ -3,15 +3,17 @@ using System;
 using HomeApp.Core.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HomeApp.Core.Migrations
 {
     [DbContext(typeof(CoreDatabaseContext))]
-    partial class CoreDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20201026133945_new schema test")]
+    partial class newschematest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

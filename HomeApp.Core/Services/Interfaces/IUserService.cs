@@ -1,4 +1,5 @@
 ﻿using HomeApp.Core.Databse.Recipes.Models;
+using HomeApp.Core.Databse.Users.Models;
 using HomeApp.Core.HttpModels;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,7 @@
 ﻿using HomeApp.Core.HttpModels;
 using HomeApp.Core.Services;
 using HomeApp.Core.Services.Interfaces;
+using HomeApp.Core.Services.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -10,11 +11,13 @@ namespace WebApi.Controllers
     [ApiController]
     public class UsersController : Controller
     {
-        private IUserService _userService;
+        private readonly IUserService _userService;
+        private readonly UserAdministrationService _userAdministrationService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, UserAdministrationService userAdministrationService)
         {
             _userService = userService;
+            _userAdministrationService = userAdministrationService;
         }
 
         [HttpPost("api/authenticate")]
@@ -32,9 +35,9 @@ namespace WebApi.Controllers
 
         [Authorize]
         [HttpGet("api/users")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var users = _userService.GetAll();
+            var users = await _userService.GetAll();
             return Ok(users);
         }
     }

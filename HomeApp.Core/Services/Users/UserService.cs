@@ -1,5 +1,6 @@
 ﻿using HomeApp.Core.Database;
 using HomeApp.Core.Databse.Recipes.Models;
+using HomeApp.Core.Databse.Users.Models;
 using HomeApp.Core.HttpModels;
 using HomeApp.Core.Services.Common;
 using HomeApp.Core.Services.Interfaces;

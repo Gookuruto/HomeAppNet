@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace HomeApp.Core.Databse.Recipes.Models
+namespace HomeApp.Core.Databse.Users.Models
 {
     public class User
     {
