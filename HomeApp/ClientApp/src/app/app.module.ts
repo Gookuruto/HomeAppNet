@@ -17,6 +17,10 @@ import { CanActivateViaAuthGuard } from "./services/authguard";
 import { API_BASE_URL } from "./webApi/api.generated.clients";
 import { RecipeDetailsComponent } from "./recipes/recipe-details/recipe-details.component";
 import { HomeComponent } from "./home/home.component";
+import { BillListComponent } from "./bills/bill-list/bill-list.component";
+import { BillDetailsComponent } from "./bills/bill-details/bill-details.component";
+import { IncomeListComponent } from "./bills/income-list/income-list.component";
+import { IncomeBillsMainComponent } from "./bills/income-bills-main/income-bills-main.component";
 
 @NgModule({
   declarations: [
@@ -26,6 +30,10 @@ import { HomeComponent } from "./home/home.component";
     LoginComponent,
     RecipeDetailsComponent,
     HomeComponent,
+    BillListComponent,
+    BillDetailsComponent,
+    IncomeListComponent,
+    IncomeBillsMainComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -37,6 +45,7 @@ import { HomeComponent } from "./home/home.component";
       { path: "login", component: LoginComponent },
       { path: "recipe", component: RecipeListComponent },
       { path: "recipedet", component: RecipeDetailsComponent },
+      { path: "bills", component: IncomeBillsMainComponent },
       { path: "", component: HomeComponent },
       { path: "**", redirectTo: "" },
     ]),

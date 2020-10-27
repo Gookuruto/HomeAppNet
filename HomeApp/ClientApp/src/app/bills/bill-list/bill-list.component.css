@@ -1,11 +1,14 @@
-table {
-  width: 100%;
+.mat-cell,
+.mat-header-cell {
+  flex: 1;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  background-color: deepskyblue;
+  color: white;
+  border-left: 1px solid white !important;
 }
-
-th.mat-sort-header-sorted {
-  color: black;
-}
-.mat-column-position {
+.mat-column-Name {
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 10% !important;
@@ -20,4 +23,8 @@ th.mat-sort-header-sorted {
   -moz-hyphens: auto;
   -webkit-hyphens: auto;
   hyphens: auto;
+}
+.spanToRight {
+  position: relative;
+  float: right;
 }

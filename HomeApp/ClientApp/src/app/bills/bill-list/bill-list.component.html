@@ -1,0 +1,40 @@
+<div>
+    <mat-card width="80vw">
+        <mat-card-content>
+            <span class="spanToRight">
+                <button mat-button>Action</button>
+                <button mat-button>Action2</button>
+                </span>
+            <mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="Name">
+                    <mat-header-cell *matHeaderCellDef> 
+                        <span class="ml-2">Name
+                        </span>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.propertyName}} </mat-cell>
+                </ng-container>
+            
+                <ng-container matColumnDef="Amount[PLN]">
+                    <mat-header-cell *matHeaderCellDef> <span class="ml-2">Amount[PLN]</span></mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.propertyName}} </mat-cell>
+                </ng-container>
+                
+                <ng-container matColumnDef="Who Paid">
+                    <mat-header-cell *matHeaderCellDef> Who Paid</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.propertyName}} </mat-cell>
+                </ng-container>
+                
+                <ng-container matColumnDef="Date">
+                    <mat-header-cell *matHeaderCellDef> Date</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.propertyName}} </mat-cell>
+                </ng-container>
+                
+                a-md-data-table-column
+                <!-- press ctrl + space to add more column snippet or delete this line -->
+            
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+        </mat-card-content>
+    </mat-card>
+</div>

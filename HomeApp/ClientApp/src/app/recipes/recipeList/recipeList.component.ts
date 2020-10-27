@@ -12,7 +12,6 @@ import { Sort } from "@angular/material/sort";
   styleUrls: ["./recipeList.component.css"],
 })
 export class RecipeListComponent implements OnInit, AfterViewInit {
-  API_URL = "http://localhost:62164";
   sortedData = [];
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ["position", "Url"];
